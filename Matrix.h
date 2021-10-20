@@ -240,7 +240,7 @@ public:
      * computed by multiplying the corresponding values from \c this
      * and rhs.
      */
-    Matrix dot(const Matrix& rhs) const;
+    void dot(const Matrix &rhs, Matrix &tempResult) const;
 
     /**
      * Returns the transpose of this matrix.

@@ -44,7 +44,7 @@ std::istream& operator>>(std::istream& is, Matrix& matrix) {
     return is;
 }
 
-Matrix Matrix::dot(const Matrix& rhs) const {
+void Matrix::dot(const Matrix &rhs, Matrix &tempResult) const {
     // Ensure the dimensions are similar.
     assert(front().size() == rhs.size());
     // Setup the result matrix
@@ -62,7 +62,7 @@ Matrix Matrix::dot(const Matrix& rhs) const {
         }
     }
     // Return the computed result
-    return result;
+    tempResult = result;
 }
 
 Matrix Matrix::transpose() const {

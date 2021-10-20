@@ -20,6 +20,8 @@
 
 #include "NeuralNet.h"
 
+Matrix tempResult;
+
 // The constructor to create a neural network with a given number of
 // layers, with each layer having a given number of neurons.
 NeuralNet::NeuralNet(const std::vector<int>& layers) :
@@ -70,7 +72,9 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
 
     // Do the forward propagation layer-by-layer
     for (size_t lyr = 0; (lyr < biases.size()); lyr++) {
-        zs.push_back(weights[lyr].dot(activation) + biases[lyr]);
+        weights[lyr].dot(activation, tempResult);
+        zs.push_back(tempResult + biases[lyr]);
+//        zs.push_back(weights[lyr].dot(activation) + biases[lyr]);
         // Update activations for the next layer (i.e., next iteration)
         activation = zs.back().apply(sigmoid);
         // Store activations for each layer for use in backward-pass below.
@@ -89,16 +93,24 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
     // Store the delta for use in the interations below
     nabla_b.push_back(delta);
     const int lastLyr = layerSizes[0].size() - 1;
-    nabla_w.push_back(delta.dot(activations.at(lastLyr - 1).transpose()));
+    delta.dot(activations.at(lastLyr - 1), tempResult);
+    nabla_w.push_back(tempResult.transpose());
+
+//    nabla_w.push_back(delta.dot(activations.at(lastLyr - 1).transpose()));
 
     // We propagate the errors backwards (to correct weights and
     // biases), from the outputs back to the inputs. Note that the
     // order of zs and nabla values are from output to input order.
     for (auto lyr = 2; (lyr <= lastLyr); lyr++) {
         const auto sp = zs[lastLyr - lyr].apply(invSigmoid);
-        delta = weights[lastLyr - lyr + 1].transpose().dot(delta) * sp;
+        weights[lastLyr - lyr + 1].transpose().dot(delta, tempResult);
+        delta = tempResult * sp;
+//      delta = weights[lastLyr - lyr + 1].transpose().dot(delta) * sp;
         nabla_b.push_back(delta);
-        nabla_w.push_back(delta.dot(activations[lastLyr - lyr].transpose()));
+
+        delta.dot(activations[lastLyr - lyr], tempResult);
+        nabla_w.push_back(tempResult.transpose());
+//        nabla_w.push_back(delta.dot(activations[lastLyr - lyr].transpose()));
     }
 
     /* Debugging code
@@ -164,7 +176,9 @@ Matrix
 NeuralNet::classify(const Matrix& inputs) const {
     Matrix result = inputs;
     for (size_t lyr = 0; (lyr < weights.size()); lyr++) {
-        result = (weights[lyr].dot(result) + biases[lyr]).apply(sigmoid);
+        weights[lyr].dot(result, tempResult);
+        tempResult = tempResult + biases[lyr];
+        result = tempResult.apply(sigmoid);
     }
     return result;
 }
