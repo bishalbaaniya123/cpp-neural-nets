@@ -176,7 +176,7 @@ public:
      */
     Matrix operator+(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2) {
-            return v1 + v2; });
+                              return v1 + v2; });
     }
 
     /**
@@ -193,7 +193,7 @@ public:
      */
     Matrix operator*(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2) {
-            return v1 * v2; });
+                              return v1 * v2; });
     }
 
     /**
@@ -225,7 +225,7 @@ public:
      */
     Matrix operator-(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2)  {
-            return v1 - v2; });
+                              return v1 - v2; });
     }
 
     /**
@@ -246,6 +246,41 @@ public:
      * Returns the transpose of this matrix.
      */
     Matrix transpose() const;
+
+    /**
+     *
+     * apply a given unary operator on self to each entry in the matrix.
+     *
+     * \param[in] operation The unary operation to be used to create
+     * the given matrix.
+     */
+    template<typename UnaryOp>
+    void applyFunction(const UnaryOp& operation) {
+        for (int i = 0; i < this->height(); i++) {
+            for (int j = 0; j < this->width(); j++) {
+                (*this)[i][j] = operation((*this)[i][j]);
+            }
+        }
+    }
+
+    /**
+     * Perform addition between two matrices using pass by reference
+     * @param rhs The right hand side matrix
+     */
+    void add(const Matrix& rhs);
+
+    /**
+     * Perform subtraction between two matrices using pass by reference
+     *
+     * @param rhs The right hand side matrix
+     */
+    void subtract(const Matrix& rhs);
+
+    /**
+     * Matrix multiplication by a constant
+     * @param rhs The right hand side matrix
+     */
+    Matrix mul(Val rhs);
 };
 
 

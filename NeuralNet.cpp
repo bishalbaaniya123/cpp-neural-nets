@@ -115,8 +115,8 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
     // order. So here we use revLyr variabe to ease accounting for the
     // reverse order in nabla_w and nabla_b
     for (auto lyr = 0, revLyr = lastLyr - 1; (lyr < lastLyr); lyr++, revLyr--) {
-        weights[lyr] = weights[lyr] - (nabla_w[revLyr] * eta);
-        biases[lyr]  = biases[lyr]  - (nabla_b[revLyr] * eta);
+        weights[lyr].subtract(nabla_w[revLyr].mul(eta));
+        biases[lyr].subtract(nabla_b[revLyr].mul(eta));
     }
 }
 

@@ -84,4 +84,43 @@ Matrix Matrix::transpose() const {
     return result;
 }
 
+/**
+ * Perform subtraction between two matrices using pass by reference
+ *
+ * @param rhs The right hand side matrix
+ */
+void Matrix::subtract(const Matrix& rhs) {
+    for (int i = 0; i < this->height(); i++) {
+        for (int j = 0; j < this->width(); j++) {
+            (*this)[i][j] = (*this)[i][j] - rhs[i][j];
+        }
+    }
+}
+
+/**
+ * Perform addition between two matrices using pass by reference
+ *
+ * @param rhs The right hand side matrix
+ */
+void Matrix::add(const Matrix& rhs) {
+    for (int i = 0; i < this->height(); i++) {
+        for (int j = 0; j < this->width(); j++) {
+            (*this)[i][j] = (*this)[i][j] + rhs[i][j];
+        }
+    }
+}
+
+/**
+ * Matrix multiplication by a constant
+ * @param c The constant
+ */
+Matrix Matrix::mul(Val c) {
+    for (int i = 0; i < this->height(); i++) {
+        for (int j = 0; j < this->width(); j++) {
+            (*this)[i][j] = (*this)[i][j] * c;
+        }
+    }
+    return *this;
+}
+
 #endif
