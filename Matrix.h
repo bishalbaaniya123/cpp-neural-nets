@@ -176,7 +176,7 @@ public:
      */
     Matrix operator+(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2) {
-                              return v1 + v2; });
+            return v1 + v2; });
     }
 
     /**
@@ -193,7 +193,7 @@ public:
      */
     Matrix operator*(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2) {
-                              return v1 * v2; });
+            return v1 * v2; });
     }
 
     /**
@@ -225,7 +225,7 @@ public:
      */
     Matrix operator-(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2)  {
-                              return v1 - v2; });
+            return v1 - v2; });
     }
 
     /**

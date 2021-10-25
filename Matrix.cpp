@@ -9,7 +9,7 @@
 #include <vector>
 
 Matrix::Matrix(const size_t row, const size_t col, const Val initVal)
-    : std::vector<std::vector<Val>>(row, std::vector<Val>(col, initVal)) {}
+        : std::vector<std::vector<Val>>(row, std::vector<Val>(col, initVal)) {}
 
 // Operator to write the matrix to a given output stream
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
@@ -114,10 +114,10 @@ void Matrix::add(const Matrix& rhs) {
  * Matrix multiplication by a constant
  * @param c The constant
  */
-Matrix Matrix::mul(Val e) {
+Matrix Matrix::mul(Val c) {
     for (int i = 0; i < this->height(); i++) {
         for (int j = 0; j < this->width(); j++) {
-            (*this)[i][j] = (*this)[i][j] * e;
+            (*this)[i][j] = (*this)[i][j] * c;
         }
     }
     return *this;

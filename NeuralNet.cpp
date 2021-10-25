@@ -23,7 +23,7 @@
 // The constructor to create a neural network with a given number of
 // layers, with each layer having a given number of neurons.
 NeuralNet::NeuralNet(const std::vector<int>& layers) :
-    layerSizes(1, layers.size()) {
+        layerSizes(1, layers.size()) {
     // Copy the values into the layer size matrix
     std::copy_n(layers.begin(), layers.size(), layerSizes[0].begin());
     // Use helper method to initializes matrices to default values.
@@ -165,7 +165,7 @@ NeuralNet::classify(const Matrix& inputs) const {
     Matrix result = inputs;
     for (size_t lyr = 0; (lyr < weights.size()); lyr++) {
         result = (weights[lyr].dot(result) + biases[lyr]);
-        result.selfapply(sigmoid);
+        result.applyFunction(sigmoid);
     }
     return result;
 }
