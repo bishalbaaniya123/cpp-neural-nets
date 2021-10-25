@@ -20,6 +20,8 @@
 
 #include "NeuralNet.h"
 
+Matrix resultMatrix;
+
 // The constructor to create a neural network with a given number of
 // layers, with each layer having a given number of neurons.
 NeuralNet::NeuralNet(const std::vector<int>& layers) :
@@ -70,7 +72,7 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
 
     // Do the forward propagation layer-by-layer
     for (size_t lyr = 0; (lyr < biases.size()); lyr++) {
-        zs.push_back(weights[lyr].dot(activation) + biases[lyr]);
+        zs.push_back(weights[lyr].dot(activation).cropGiantMatrix(weights[lyr].size(), activations.front().size()) + biases[lyr]);
         // Update activations for the next layer (i.e., next iteration)
         activation = zs.back().apply(sigmoid);
         // Store activations for each layer for use in backward-pass below.

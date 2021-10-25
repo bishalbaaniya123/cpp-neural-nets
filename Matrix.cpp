@@ -44,7 +44,17 @@ std::istream& operator>>(std::istream& is, Matrix& matrix) {
     return is;
 }
 
+Matrix giantMatrix = Matrix(1000, 1000);
+
+Matrix Matrix::cropGiantMatrix(size_t height, size_t width) const {
+    (*this).resize(giantMatrix, height);
+    for (int i = 0; i < height; ++i)
+        giantMatrix[i].resize(width);
+    return giantMatrix;
+}
+
 Matrix Matrix::dot(const Matrix& rhs) const {
+    *this.resize(1);
     // Ensure the dimensions are similar.
     assert(front().size() == rhs.size());
     // Setup the result matrix
@@ -58,11 +68,12 @@ Matrix Matrix::dot(const Matrix& rhs) const {
                 sum += (*this)[row][i] * rhs[i][col];
             }
             // Store the result in an appropriate entry
+            giantMatrix[row][col] = sum;
             result[row][col] = sum;
         }
     }
     // Return the computed result
-    return result;
+    return cropGiantMatrix(size(), mWidth);
 }
 
 Matrix Matrix::transpose() const {
