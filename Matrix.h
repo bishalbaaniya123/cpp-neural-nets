@@ -246,6 +246,8 @@ public:
      * Returns the transpose of this matrix.
      */
     Matrix transpose() const;
+
+    static std::array<unsigned long, 2> getChunkSize(unsigned long loopSize);
 };
 
 

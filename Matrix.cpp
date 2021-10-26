@@ -3,13 +3,13 @@
 #ifndef MATRIX_CPP
 #define MATRIX_CPP
 
-#include <cassert>
-#include <vector>
 #include "Matrix.h"
 
-Matrix::Matrix(const size_t row, const size_t col, const Val initVal) :
-        std::vector<std::vector<Val>>(row, std::vector<Val>(col, initVal)) {
-}
+#include <cassert>
+#include <vector>
+
+Matrix::Matrix(const size_t row, const size_t col, const Val initVal)
+        : std::vector<std::vector<Val>>(row, std::vector<Val>(col, initVal)) {}
 
 // Operator to write the matrix to a given output stream
 std::ostream& operator<<(std::ostream& os, const Matrix& matrix) {
@@ -75,13 +75,44 @@ Matrix Matrix::transpose() const {
     // and height flipped.
     Matrix result(width(), height());
     // Now copy the values creating the transpose
+
+/*//   START previous code
     for (int row = 0; (row < height()); row++) {
+        for (int col = 0; (col < width()); col++) {
+            result[col][row] = (*this)[row][col];
+        }
+    }
+    // END PREVIOUS CODE*/
+
+    std::array<unsigned long, 2> chunkMatrix =
+            getChunkSize(height());
+
+    for (unsigned long row = 0; row < chunkMatrix[0] - 1; ++row) {
+        for (int col = 0; (col < width()); col++) {
+            result[col][row] = (*this)[row][col];
+        }
+    }
+
+    for (unsigned long row = chunkMatrix[0]; row < chunkMatrix[0] * 2 - 1; ++row) {
+        for (int col = 0; (col < width()); col++) {
+            result[col][row] = (*this)[row][col];
+        }
+    }
+
+    for (unsigned long row = chunkMatrix[0] * 2; row < chunkMatrix[0] * 2 + chunkMatrix[1] - 1; ++row) {
         for (int col = 0; (col < width()); col++) {
             result[col][row] = (*this)[row][col];
         }
     }
     // Return the resulting transpose.
     return result;
+}
+
+std::array<unsigned long, 2> Matrix::getChunkSize(unsigned long loopSize) {
+    std::array<unsigned long, 2> arr2{};
+    arr2[0] = static_cast<int>(loopSize / 3);
+    arr2[1] = loopSize - arr2[0] * 2;
+    return arr2;
 }
 
 #endif
