@@ -99,30 +99,31 @@ Matrix Matrix::transpose() const {
         }
     }
 
-    for (unsigned long row = chunkMatrix[0] * 2; row < chunkMatrix[0] * 2 + chunkMatrix[1] - 1; ++row) {
-        for (int col = 0; (col < width()); col++) {
-            result[col][row] = (*this)[row][col];
-        }
-    }
-    for (unsigned long row = 0; row < chunkMatrix[0] - 1; ++row) {
+    for (unsigned long row = chunkMatrix[0] * 2; row < chunkMatrix[0] * 3 - 1; ++row) {
         for (int col = 0; (col < width()); col++) {
             result[col][row] = (*this)[row][col];
         }
     }
 
-    for (unsigned long row = chunkMatrix[0]; row < chunkMatrix[0] * 2 - 1; ++row) {
+    for (unsigned long row = chunkMatrix[0] * 3; row < chunkMatrix[0] * 4 - 1; ++row) {
         for (int col = 0; (col < width()); col++) {
             result[col][row] = (*this)[row][col];
         }
     }
 
-    for (unsigned long row = chunkMatrix[0]; row < chunkMatrix[0] * 2 - 1; ++row) {
+    for (unsigned long row = chunkMatrix[0] * 4; row < chunkMatrix[0] * 5 - 1; ++row) {
         for (int col = 0; (col < width()); col++) {
             result[col][row] = (*this)[row][col];
         }
     }
 
-    for (unsigned long row = chunkMatrix[0] * 2; row < chunkMatrix[0] * 2 + chunkMatrix[1] - 1; ++row) {
+    for (unsigned long row = chunkMatrix[0] * 5; row < chunkMatrix[0] * 6 - 1; ++row) {
+        for (int col = 0; (col < width()); col++) {
+            result[col][row] = (*this)[row][col];
+        }
+    }
+
+    for (unsigned long row = chunkMatrix[0] * 6; row < chunkMatrix[0] * 6 + chunkMatrix[1] - 1; ++row) {
         for (int col = 0; (col < width()); col++) {
             result[col][row] = (*this)[row][col];
         }
