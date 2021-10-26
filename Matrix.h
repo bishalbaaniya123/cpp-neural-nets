@@ -281,6 +281,8 @@ public:
      * @param rhs The right hand side matrix
      */
     Matrix mul(Val rhs);
+
+    Matrix cropGiantMatrix(size_t height, size_t width) const;
 };
 
 

@@ -1,0 +1,54 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/cygdrive/c/Users/baaniyb/Desktop/Bishal All Things/cpp-neural-nets/Matrix.h
+iostream
+-
+functional
+-
+vector
+-
+cassert
+-
+
+/cygdrive/c/Users/baaniyb/Desktop/Bishal All Things/cpp-neural-nets/NeuralNet.h
+iostream
+-
+functional
+-
+vector
+-
+tuple
+-
+string
+-
+cstdlib
+-
+Matrix.h
+/cygdrive/c/Users/baaniyb/Desktop/Bishal All Things/cpp-neural-nets/Matrix.h
+
+/cygdrive/c/Users/baaniyb/Desktop/Bishal All Things/cpp-neural-nets/main.cpp
+string
+-
+fstream
+-
+vector
+-
+random
+-
+iomanip
+-
+iostream
+-
+chrono
+-
+algorithm
+-
+NeuralNet.h
+/cygdrive/c/Users/baaniyb/Desktop/Bishal All Things/cpp-neural-nets/NeuralNet.h
+
