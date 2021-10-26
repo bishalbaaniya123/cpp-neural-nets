@@ -247,7 +247,8 @@ public:
      */
     Matrix transpose() const;
 
-    static std::array<unsigned long, 2> getChunkSize(unsigned long loopSize);
+    static std::array<unsigned long, 2> getChunkSize(unsigned long loopSize,
+                                                     size_t divisions);
 };
 
 
