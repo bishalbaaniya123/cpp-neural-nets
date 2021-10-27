@@ -17,7 +17,7 @@
 using Val = double;
 
 /** Short cut to a 2-d vector double values to streamline the code */
-using TwoDVec = std::vector<std::vector<Val>>;
+using TwoDVec = std::vector<Val>;
 
 /** A matrix class to perform basic matrix operations.
 
@@ -31,7 +31,7 @@ using TwoDVec = std::vector<std::vector<Val>>;
 
     <li> Stream insertion and extraction operators to conveniently
     load and print values.</li>
-
+    
     </ul>
 */
 class Matrix : public TwoDVec {
@@ -84,23 +84,22 @@ public:
     explicit Matrix(const size_t rows = 0, const size_t cols = 0,
                     const Val initVal = 0);
 
-    size_t col;
-
-
     /**
      * Returns the height or number of rows in this matrix.
      *
      * \return Returns the height or number of rows in this matrix.
      */
-    int height() const { return size(); }
+    int height() const {
+        if (col == 0) return 0;
+        return (size() / col); }
 
     /**
      * Returns the width or number of columns in this matrix.
      *
      * \return Returns the width or number of columns in this matrix.
      */
-    int width() const { return (height() > 0) ? front().size() : 0; }
-
+    int width() const { return (height() > 0) ? col : 0; }
+    
     /**
      * Creates a new matrix in which each value is obtained by
      * applying a given unary operator to each entry in the matrix.
@@ -118,11 +117,11 @@ public:
         // in the new matrix
         Matrix result = *this;  // Initialize to current values.
         // Apply unary operation to each element in the result
-        for (auto& row : result) {
-            for (auto& val : row) {
-                val = operation(val);
-            }
+        // for (auto& row : result) {
+        for (auto& val : result) {
+            val = operation(val);
         }
+        // }
         // The resulting matrix after applying specified operations.
         return result;
     }
@@ -138,29 +137,27 @@ public:
      *
      * \param[in] operation The binary operation to be used to create
      * each value in the given matrix.
-     */
+     */    
     template<typename BinaryOp>
     Matrix apply(const Matrix& other, const BinaryOp& operation) const {
         // Check to ensure the number of rows are the same.
-        assert(size() == other.size());
+        assert(height() == other.height());
         // If the matrix is empty, then we have nothing to do.
         if (empty()) {
             return *this;  // return copy of empty matrix.
         }
         // Ensure the number of columns match.
-        assert(front().size() == other.front().size());
+        assert(col == other.col);
         // Now apply the specified operation to each element and store it
         // in the new matrix
         Matrix result = *this;  // Initialize to current values.
         // Here we use index so that we can access the corresponding
         // element in the other matrix as well.
         for (size_t row = 0; (row < size()); ++row) {
-            for (size_t col = 0; (col < (*this)[row].size()); ++col) {
-                // Recollect result is initialized to values of this
-                // matrix. So we use result to reduce the number of
-                // different values accessed.
-                result[row][col] = operation(result[row][col], other[row][col]);
-            }
+            // Recollect result is initialized to values of this
+            // matrix. So we use result to reduce the number of
+            // different values accessed.
+            result[row] = operation(result[row], other[row]);
         }
         // The resulting matrix after applying specified operations.
         return result;
@@ -179,7 +176,7 @@ public:
      */
     Matrix operator+(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2) {
-            return v1 + v2; });
+                              return v1 + v2; });
     }
 
     /**
@@ -196,7 +193,7 @@ public:
      */
     Matrix operator*(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2) {
-            return v1 * v2; });
+                              return v1 * v2; });
     }
 
     /**
@@ -214,7 +211,7 @@ public:
     Matrix operator*(const Val val) const {
         return apply([val](const auto& v) { return v * val; });
     }
-
+    
     /**
      * Operator to subtract two matrices with the same dimensions.
      *
@@ -228,9 +225,9 @@ public:
      */
     Matrix operator-(const Matrix& rhs) const {
         return apply(rhs, [](const auto& v1, const auto& v2)  {
-            return v1 - v2; });
+                              return v1 - v2; });
     }
-
+    
     /**
      * Performs the dot product of two matrices. This method has a
      * O(n^3) time complexity.
@@ -249,6 +246,36 @@ public:
      * Returns the transpose of this matrix.
      */
     Matrix transpose() const;
+
+    /**
+     * Performs subtract operation between the calling object
+     * and the Matrix passed.
+     */
+    void subtract(const Matrix& rhs);
+    /**
+     * Performs multiply operation between the calling object
+     * and the Matrix passed.
+     */
+    Matrix mul(const Val rhs);
+
+    /**
+     * 
+     * apply a given unary operator on self to each entry in the matrix.
+     *
+     * \param[in] operation The unary operation to be used to create
+     * the given matrix.
+     */
+    template<typename UnaryOp>
+    void selfapply(const UnaryOp& operation) {
+        // Note that the unary operation can be applied as:
+        // val = operation(val);
+        // Loop over each element to perform the unary operation
+        for (int i = 0; i < this->height(); i++) {
+            { (*this)[i] = operation((*this)[i]); }
+        }
+    }
+   private:
+    size_t col = 0;
 };
 
 

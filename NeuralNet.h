@@ -53,7 +53,7 @@ class NeuralNet {
      * \param[out] nnet The neural network whose data is to be
      * read/modified by this method.
      */
-    friend std::istream& operator>>(std::istream& is, NeuralNet& nnet);
+    friend std::istream& operator>>(std::istream& is, NeuralNet& nnet);    
 
 public:
     /**
@@ -141,7 +141,7 @@ protected:
         return 1. / (1. + std::exp(-val));
     }
 
-
+    
     /**
      * A simple inverse-sigmoid function.
      *

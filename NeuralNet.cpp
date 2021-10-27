@@ -23,9 +23,9 @@
 // The constructor to create a neural network with a given number of
 // layers, with each layer having a given number of neurons.
 NeuralNet::NeuralNet(const std::vector<int>& layers) :
-        layerSizes(1, layers.size()) {
+    layerSizes(1, layers.size()) {
     // Copy the values into the layer size matrix
-    std::copy_n(layers.begin(), layers.size(), layerSizes[0].begin());
+    std::copy_n(layers.begin(), layers.size(), layerSizes.begin());
     // Use helper method to initializes matrices to default values.
     initBiasAndWeightMatrices(layers, biases, weights);
 }
@@ -40,7 +40,7 @@ NeuralNet::initBiasAndWeightMatrices(const std::vector<int>& layerSizes,
     // std::uniform_real_distribution<Val> rndDist;
     // std::random_device rndGen;
     // auto rnd = [&](const auto&){ return rndDist(rndGen); };
-
+    
     // Create the column matrices for each layer in the nnet.  Each
     // value is initialized with a random value in the range 0 to 1.0
     for (size_t lyr = 1; (lyr < layerSizes.size()); lyr++) {
@@ -53,7 +53,7 @@ NeuralNet::initBiasAndWeightMatrices(const std::vector<int>& layerSizes,
         // Create the 2-D matrices of weights for each layer
         // weights.push_back(Matrix(rows, cols).apply(rnd));
         weights.push_back(Matrix(rows, cols));
-    }
+    }    
 }
 
 // The main learning method that essentially uses matrix operations
@@ -76,7 +76,7 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
         // Store activations for each layer for use in backward-pass below.
         activations.push_back(activation);
     }
-
+    
     // ----------------[ Now do the backward pass ]-----------------
     // This pass computes nabla (∇) in weights and biases so that the
     // network can be suitably updated to minimize errors.
@@ -88,7 +88,7 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
     MatrixVec nabla_b, nabla_w;
     // Store the delta for use in the interations below
     nabla_b.push_back(delta);
-    const int lastLyr = layerSizes[0].size() - 1;
+    const int lastLyr = layerSizes.size() - 1;
     nabla_w.push_back(delta.dot(activations.at(lastLyr - 1).transpose()));
 
     // We propagate the errors backwards (to correct weights and
@@ -142,7 +142,7 @@ std::ostream& operator<<(std::ostream& os, const NeuralNet& nnet) {
 std::istream& operator>>(std::istream& is, NeuralNet& nnet) {
     // First load the layer sizes
     is >> nnet.layerSizes;
-    const int layerCount = nnet.layerSizes[0].size();
+    const int layerCount = nnet.layerSizes.height();
     // Now read the biases for each layer
     Matrix temp;
     for (int i = 0; (i < layerCount); i++) {
@@ -155,7 +155,7 @@ std::istream& operator>>(std::istream& is, NeuralNet& nnet) {
         nnet.weights.push_back(temp);
     }
     // Return the input stream as per convention
-    return is;
+    return is;    
 }
 
 

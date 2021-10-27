@@ -42,7 +42,7 @@ Matrix loadPGM(const std::string& path) {
     Matrix img(width * height, 1);
     for (int i = 0; (i < width * height); i++) {
         file >> value;
-        img[i][0] = value / maxVal;
+        img[i] = value / maxVal;
     }
     return img;
 }
@@ -67,7 +67,7 @@ Matrix getExpectedDigitOutput(const std::string& path) {
     // Now create the expected matrix with the just the value
     // corresponding to the label set to 1.0
     Matrix expected(10, 1, 0.0);
-    expected[label][0] = 1.0;  // Just label should be 1.0
+    expected[label] = 1.0;  // Just label should be 1.0
     return expected;
 }
 
@@ -79,7 +79,7 @@ Matrix getExpectedDigitOutput(const std::string& path) {
  *
  * \param[in] path The prefix path to the location where the training
  * images are actually stored.
- *
+ * 
  * \param[in] fileNames The list of PGM image file names to be used
  * for training.
  *
@@ -123,7 +123,7 @@ void train(NeuralNet& net, const std::string& path, const int limit = 1e6,
     int count = 0;
     // Load the data from the given image file list.
     for (std::string imgName; std::getline(fileList, imgName) &&
-                              count < limit; count++) {
+             count < limit; count++) {
         fileNames.push_back(imgName);
     }
     // Randomly shuffle the list of file names so that we use a random
@@ -131,7 +131,7 @@ void train(NeuralNet& net, const std::string& path, const int limit = 1e6,
     std::default_random_engine rg;
     std::shuffle(fileNames.begin(), fileNames.end(),
                  std::default_random_engine());
-    // Use the helper method to train
+    // Use the helper method to train 
     train(net, path, fileNames, limit);
 }
 
@@ -157,7 +157,7 @@ int maxElemIndex(const std::vector<Val>& vec) {
  *
  * \param[in] path The prefix path to the location where the training
  * images are actually stored.
- *
+ * 
  * \param[in] imgFileList A text file containing the list of
  * image-file-names to be used for assessing the effectiveness of the
  * supplied \c net.
@@ -181,8 +181,8 @@ void assess(NeuralNet& net, const std::string& path,
         // Find the maximum index positions in exp results to see if
         // they are the same. If they are it is a good
         // result. Otherwise, it is an error.
-        const int expIdx = maxElemIndex(exp.transpose()[0]);
-        const int resIdx = maxElemIndex(res.transpose()[0]);
+        const int expIdx = maxElemIndex(exp.transpose());
+        const int resIdx = maxElemIndex(res.transpose());
         if (expIdx == resIdx) {
             passCount++;
         }
@@ -205,7 +205,7 @@ void assess(NeuralNet& net, const std::string& path,
  *     1. The path where training and test images are stored.
  *     2. The first argument is assumed to be the number of images to
  *        be used.
- *     3. Number of ephocs to be used for training. Default is 30.
+ *     3. Number of ephocs to be used for training. Default is 30. 
  *     4. The file containing the list of training images to be
  *        used. By default this parameter is set to
  *        "TrainingSetList.txt".
@@ -223,7 +223,7 @@ int main(int argc, char *argv[]) {
     }
     // Process optional command-line arguments or use default values.
     const int imgCount  = (argc > 2 ? std::stoi(argv[2]) : 5000);
-    const int epochs    = (argc > 3 ? std::stoi(argv[3]) : 10);
+    const int epochs    = (argc > 3 ? std::stoi(argv[3]) : 10);    
     const std::string trainImgs = (argc > 4 ? argv[4] : "TrainingSetList.txt");
     const std::string testImgs  = (argc > 5 ? argv[5] : "TestingSetList.txt");
 

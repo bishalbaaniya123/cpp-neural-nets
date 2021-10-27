@@ -9,7 +9,7 @@
 #include <vector>
 
 Matrix::Matrix(const size_t row, const size_t col, const Val initVal)
-        : std::vector<Val>(row * col, initVal) {
+    : std::vector<Val>(row * col, initVal) {
     this->col = col;
 }
 
@@ -53,7 +53,6 @@ std::istream& operator>>(std::istream& is, Matrix& matrix) {
 
 Matrix Matrix::dot(const Matrix& rhs) const {
     // Ensure the dimensions are similar.
-    std::cout << "COLUMN: " << col << " ROW:  " << (rhs.height());
     assert(col == rhs.height());
     // Setup the result matrix
     const auto mWidth = rhs.col;
