@@ -9,7 +9,7 @@
 #include <vector>
 
 Matrix::Matrix(const size_t row, const size_t col, const Val initVal)
-        : std::vector<Val>(row * col, initVal) {
+    : std::vector<Val>(row * col, initVal) {
     this->col = col;
 }
 

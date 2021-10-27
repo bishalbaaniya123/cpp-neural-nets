@@ -84,6 +84,9 @@ public:
     explicit Matrix(const size_t rows = 0, const size_t cols = 0,
                     const Val initVal = 0);
 
+    size_t col;
+
+
     /**
      * Returns the height or number of rows in this matrix.
      *
