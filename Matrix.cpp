@@ -56,7 +56,75 @@ Matrix Matrix::dot(const Matrix& rhs) const {
     Matrix result(height(), mWidth);
     size_t r = 0;
     // Do the actual matrix multiplication
-    for (size_t j = 0; (j < size()); j = j + col) {
+    //START Previous code
+/*    for (size_t j = 0; (j < size()); j = j + col) {
+        for (size_t k = 0; (k < rhs.col); k++) {
+            Val sum = 0;
+            for (size_t i = 0; (i < col); i++) {
+                sum += (*this)[i + j] * rhs[i * rhs.col + k];
+            }
+            // Store the result in an appropriate entry
+            result[r++] = sum;
+        }
+    }*/
+    //END Previous code
+
+    std::array<size_t, 2> chunkMatrix =
+            getChunkSize(size(), 6);
+
+    for (size_t j = 0; (j < chunkMatrix[0]); j = j + col) {
+        for (size_t k = 0; (k < rhs.col); k++) {
+            Val sum = 0;
+            for (size_t i = 0; (i < col); i++) {
+                sum += (*this)[i + j] * rhs[i * rhs.col + k];
+            }
+            // Store the result in an appropriate entry
+            result[r++] = sum;
+        }
+    }
+    for (size_t j = chunkMatrix[0]; (j < chunkMatrix[0] * 2); j = j + col) {
+        for (size_t k = 0; (k < rhs.col); k++) {
+            Val sum = 0;
+            for (size_t i = 0; (i < col); i++) {
+                sum += (*this)[i + j] * rhs[i * rhs.col + k];
+            }
+            // Store the result in an appropriate entry
+            result[r++] = sum;
+        }
+    }
+    for (size_t j = chunkMatrix[0] * 2; (j < chunkMatrix[0] * 3); j = j + col) {
+        for (size_t k = 0; (k < rhs.col); k++) {
+            Val sum = 0;
+            for (size_t i = 0; (i < col); i++) {
+                sum += (*this)[i + j] * rhs[i * rhs.col + k];
+            }
+            // Store the result in an appropriate entry
+            result[r++] = sum;
+        }
+    }
+    for (size_t j = chunkMatrix[0] * 3; (j < chunkMatrix[0] * 4); j = j + col) {
+        for (size_t k = 0; (k < rhs.col); k++) {
+            Val sum = 0;
+            for (size_t i = 0; (i < col); i++) {
+                sum += (*this)[i + j] * rhs[i * rhs.col + k];
+            }
+            // Store the result in an appropriate entry
+            result[r++] = sum;
+        }
+    }
+    for (size_t j = chunkMatrix[0] * 4; (j < chunkMatrix[0] * 5); j = j + col) {
+        for (size_t k = 0; (k < rhs.col); k++) {
+            Val sum = 0;
+            for (size_t i = 0; (i < col); i++) {
+                sum += (*this)[i + j] * rhs[i * rhs.col + k];
+            }
+            // Store the result in an appropriate entry
+            result[r++] = sum;
+        }
+    }
+    for (size_t j = chunkMatrix[0] * 5;
+    (j < chunkMatrix[0] * 5 + chunkMatrix[1]);
+    j = j + col) {
         for (size_t k = 0; (k < rhs.col); k++) {
             Val sum = 0;
             for (size_t i = 0; (i < col); i++) {
