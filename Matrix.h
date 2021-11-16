@@ -16,8 +16,8 @@
 /** Shortcut for the value of each element in the matrix */
 using Val = double;
 
-/** Short cut to a 2-d vector double values to streamline the code */
-using TwoDVec = std::vector<std::vector<Val>>;
+/** Short cut to a 1-d vector double values to streamline the code */
+using SingleRowMatrix = std::vector<Val>;
 
 /** A matrix class to perform basic matrix operations.
 
@@ -34,7 +34,7 @@ using TwoDVec = std::vector<std::vector<Val>>;
 
     </ul>
 */
-class Matrix : public TwoDVec {
+class Matrix : public SingleRowMatrix {
     /** Stream insertion operator to ease printing matrices
      *
      * This method prints the dimension of the matrix and then prints
@@ -89,14 +89,16 @@ public:
      *
      * \return Returns the height or number of rows in this matrix.
      */
-    int height() const { return size(); }
+    size_t height() const {
+        return col == 0 ? 0 : (size() / col);
+    }
 
     /**
      * Returns the width or number of columns in this matrix.
      *
      * \return Returns the width or number of columns in this matrix.
      */
-    int width() const { return (height() > 0) ? front().size() : 0; }
+    size_t width() const { return (height() > 0) ? col : 0; }
 
     /**
      * Creates a new matrix in which each value is obtained by
@@ -115,10 +117,8 @@ public:
         // in the new matrix
         Matrix result = *this;  // Initialize to current values.
         // Apply unary operation to each element in the result
-        for (auto& row : result) {
-            for (auto& val : row) {
-                val = operation(val);
-            }
+        for (auto& val : result) {
+            val = operation(val);
         }
         // The resulting matrix after applying specified operations.
         return result;
@@ -139,25 +139,23 @@ public:
     template<typename BinaryOp>
     Matrix apply(const Matrix& other, const BinaryOp& operation) const {
         // Check to ensure the number of rows are the same.
-        assert(size() == other.size());
+        assert(height() == other.height());
         // If the matrix is empty, then we have nothing to do.
         if (empty()) {
             return *this;  // return copy of empty matrix.
         }
         // Ensure the number of columns match.
-        assert(front().size() == other.front().size());
+        assert(col == other.col);
         // Now apply the specified operation to each element and store it
         // in the new matrix
         Matrix result = *this;  // Initialize to current values.
         // Here we use index so that we can access the corresponding
         // element in the other matrix as well.
         for (size_t row = 0; (row < size()); ++row) {
-            for (size_t col = 0; (col < (*this)[row].size()); ++col) {
-                // Recollect result is initialized to values of this
-                // matrix. So we use result to reduce the number of
-                // different values accessed.
-                result[row][col] = operation(result[row][col], other[row][col]);
-            }
+            // Recollect result is initialized to values of this
+            // matrix. So we use result to reduce the number of
+            // different values accessed.
+            result[row] = operation(result[row], other[row]);
         }
         // The resulting matrix after applying specified operations.
         return result;
@@ -246,6 +244,42 @@ public:
      * Returns the transpose of this matrix.
      */
     Matrix transpose() const;
+
+    /**
+     * Performs subtract operation between the calling object
+     * and the Matrix passed.
+     */
+    void subtract(const Matrix& rhs);
+    /**
+     * Performs multiply operation between the calling object
+     * and the Matrix passed.
+     */
+    Matrix mul(const Val rhs);
+
+    static std::array<size_t, 2>
+    getChunkSize(size_t loopSize, size_t divisions) {
+        std::array<size_t, 2> arr2{};
+        arr2[0] = static_cast<int>(loopSize / divisions);
+        arr2[1] = loopSize - arr2[0] * (divisions - 1);
+        return arr2;
+    }
+
+    /**
+     *
+     * apply a given unary operator on self to each entry in the matrix.
+     *
+     * \param[in] operation The unary operation to be used to create
+     * the given matrix.
+     */
+    template<typename UnaryOp>
+    void selfapply(const UnaryOp& operation) {
+        for (size_t i = 0; i < this->height(); i++) {
+            { (*this)[i] = operation((*this)[i]); }
+        }
+    }
+
+private :
+    size_t col = 0;
 };
 
 

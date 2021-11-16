@@ -42,7 +42,7 @@ Matrix loadPGM(const std::string& path) {
     Matrix img(width * height, 1);
     for (int i = 0; (i < width * height); i++) {
         file >> value;
-        img[i][0] = value / maxVal;
+        img[i] = value / maxVal;
     }
     return img;
 }
@@ -67,7 +67,7 @@ Matrix getExpectedDigitOutput(const std::string& path) {
     // Now create the expected matrix with the just the value
     // corresponding to the label set to 1.0
     Matrix expected(10, 1, 0.0);
-    expected[label][0] = 1.0;  // Just label should be 1.0
+    expected[label] = 1.0;  // Just label should be 1.0
     return expected;
 }
 
@@ -181,8 +181,8 @@ void assess(NeuralNet& net, const std::string& path,
         // Find the maximum index positions in exp results to see if
         // they are the same. If they are it is a good
         // result. Otherwise, it is an error.
-        const int expIdx = maxElemIndex(exp.transpose()[0]);
-        const int resIdx = maxElemIndex(res.transpose()[0]);
+        const int expIdx = maxElemIndex(exp.transpose());
+        const int resIdx = maxElemIndex(res.transpose());
         if (expIdx == resIdx) {
             passCount++;
         }

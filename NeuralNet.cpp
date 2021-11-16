@@ -25,7 +25,7 @@
 NeuralNet::NeuralNet(const std::vector<int>& layers) :
         layerSizes(1, layers.size()) {
     // Copy the values into the layer size matrix
-    std::copy_n(layers.begin(), layers.size(), layerSizes[0].begin());
+    std::copy_n(layers.begin(), layers.size(), layerSizes.begin());
     // Use helper method to initializes matrices to default values.
     initBiasAndWeightMatrices(layers, biases, weights);
 }
@@ -88,7 +88,7 @@ void NeuralNet::learn(const Matrix& inputs, const Matrix& expected,
     MatrixVec nabla_b, nabla_w;
     // Store the delta for use in the interations below
     nabla_b.push_back(delta);
-    const int lastLyr = layerSizes[0].size() - 1;
+    const int lastLyr = layerSizes.size() - 1;
     nabla_w.push_back(delta.dot(activations.at(lastLyr - 1).transpose()));
 
     // We propagate the errors backwards (to correct weights and
@@ -142,7 +142,7 @@ std::ostream& operator<<(std::ostream& os, const NeuralNet& nnet) {
 std::istream& operator>>(std::istream& is, NeuralNet& nnet) {
     // First load the layer sizes
     is >> nnet.layerSizes;
-    const int layerCount = nnet.layerSizes[0].size();
+    const int layerCount = nnet.layerSizes.height();
     // Now read the biases for each layer
     Matrix temp;
     for (int i = 0; (i < layerCount); i++) {
