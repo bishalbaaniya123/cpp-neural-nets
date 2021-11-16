@@ -90,7 +90,7 @@ Matrix Matrix::transpose() const {
     // END PREVIOUS CODE
 
     std::array<size_t, 2> chunkMatrix =
-            getChunkSize(width(), 3);
+            getChunkSize(width(), 6);
 
     size_t i = 0;
     for (size_t row = 0; (row < chunkMatrix[0]); row++) {
@@ -103,8 +103,23 @@ Matrix Matrix::transpose() const {
             result[i++] = (*this)[row + col * colVal];
         }
     }
-    for (size_t row = chunkMatrix[0] * 2;
-         (row < chunkMatrix[0] * 2 + chunkMatrix[1]); row++) {
+    for (size_t row = chunkMatrix[0] * 2; (row < chunkMatrix[0] * 3); row++) {
+        for (size_t colVal = 0; (colVal < result.col); colVal++) {
+            result[i++] = (*this)[row + col * colVal];
+        }
+    }
+    for (size_t row = chunkMatrix[0] * 3; (row < chunkMatrix[0] * 4); row++) {
+        for (size_t colVal = 0; (colVal < result.col); colVal++) {
+            result[i++] = (*this)[row + col * colVal];
+        }
+    }
+    for (size_t row = chunkMatrix[0] * 4; (row < chunkMatrix[0] * 5); row++) {
+        for (size_t colVal = 0; (colVal < result.col); colVal++) {
+            result[i++] = (*this)[row + col * colVal];
+        }
+    }
+    for (size_t row = chunkMatrix[0] * 5;
+         (row < chunkMatrix[0] * 5 + chunkMatrix[1]); row++) {
         for (size_t colVal = 0; (colVal < result.col); colVal++) {
             result[i++] = (*this)[row + col * colVal];
         }
